@@ -202,7 +202,7 @@
       'club-info-and-guides': {
         kicker: 'Required reading · every member',
         title: 'Club Info & Guidelines',
-        subtitle: 'Club rules, safety procedures, schedules and forms. Every member must read these before working on a robot.',
+        subtitle: 'Club rules, safety procedures, schedules and forms. Every member must read these before working on a project.',
         notice: '⚠️ Read every document on this page. Forms marked "Acknowledgment" must be printed, signed by you and a parent/guardian, and handed to the club advisor.'
       },
       'instructor_guides': {
@@ -247,8 +247,11 @@
     const githubFile = (p) => `https://github.com/${ORG}/${REPO}/blob/HEAD/${encPath(p)}`;
     const ext = (p) => (p.split('.').pop() || '').toLowerCase();
     // "01_battery_safety-policy.md" -> "Battery Safety Policy"
+    const SMALL_WORDS = ['a', 'an', 'and', 'as', 'at', 'for', 'in', 'of', 'on', 'or', 'the', 'to', 'with'];
     const niceName = (s) => s.replace(/\.[^.]+$/, '').replace(/^\d+[\s._-]*/, '').replace(/[_-]+/g, ' ').trim()
-                              .replace(/\b\w/g, c => c.toUpperCase());
+                              .split(/\s+/).map((w, i) => (i > 0 && SMALL_WORDS.includes(w.toLowerCase()))
+                                ? w.toLowerCase() : (/^\d+d$/i.test(w) ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)))
+                              .join(' ');
 
     function readCache(key) { try { return JSON.parse(localStorage.getItem(key)); } catch { return null; } }
     function writeCache(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch { /* ignore */ } }
